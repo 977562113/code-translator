@@ -17,26 +17,29 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:extension.everest.fanyi"
+    "onCommand:extension.everest.fanyi1",
+    "onCommand:extension.everest.fanyi2",
+    "onCommand:extension.everest.fanyi3",
+    "onCommand:extension.everest.fanyi4"
   ],
   "icon": "logo.png",
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi1",
         "title": "翻译【驼峰】"
       },
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi2",
         "title": "翻译【空格】"
       },
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi3",
         "title": "翻译【中划线】"
       },
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi4",
         "title": "翻译【下划线】"
       }
     ],
@@ -68,15 +71,27 @@
     },
     "keybindings": [
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi1",
         "key": "ctrl+t",
         "mac": "cmd+t",
         "when": "editorTextFocus"
       },
       {
-        "command": "extension.everest.fanyi",
+        "command": "extension.everest.fanyi2",
         "key": "ctrl+shift+t",
-        "mac": "cmd+shift+k",
+        "mac": "cmd+shift+t",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.everest.fanyi3",
+        "key": "ctrl+y",
+        "mac": "cmd+y",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.everest.fanyi4",
+        "key": "ctrl+shift+y",
+        "mac": "cmd+shift+y",
         "when": "editorTextFocus"
       }
     ],
@@ -84,7 +99,22 @@
       "editor/context": [
         {
           "when": "editorTextFocus",
-          "command": "extension.everest.fanyi",
+          "command": "extension.everest.fanyi1",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "extension.everest.fanyi2",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "extension.everest.fanyi3",
+          "group": "1_modification"
+        },
+        {
+          "when": "editorTextFocus",
+          "command": "extension.everest.fanyi4",
           "group": "1_modification"
         }
       ]

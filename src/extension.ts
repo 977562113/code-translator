@@ -126,8 +126,8 @@ function fanyiFile(fileText: string, translateZhCN: boolean) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
-    "extension.everest.fanyi",
+  let disposable1 = vscode.commands.registerCommand(
+    "extension.everest.fanyi1",
     async () => {
       let editor = vscode.window.activeTextEditor;
       if (!editor) {
@@ -146,21 +146,75 @@ export function activate(context: vscode.ExtensionContext) {
         });
         //vscode.window.showInformationMessage("translate result: " + newWords);
       }
-      //  else {
-      //   let documentText = document.getText();
+    }
+  );
 
-      //   //没有选中翻译json文件
-      //   const code = await fanyiFile(documentText, translateZhCN);
-      //   const newfile = stringifyPretty(code);
-      //   const lastLine = document.lineAt(document.lineCount - 1);
-      //   const range = new vscode.Range(
-      //     new vscode.Position(0, 0),
-      //     lastLine.range.end
-      //   );
-      //   editor!.edit((editBuilder) => {
-      //     editBuilder.replace(range, newfile);
-      //   });
-      // }
+  let disposable2 = vscode.commands.registerCommand(
+    "extension.everest.fanyi2",
+    async () => {
+      let editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return; // No open text editor
+      }
+      let document = editor.document;
+      let selection = editor.selection;
+      let text = editor.document.getText(selection);
+      const { translateZhCN } = getProxyConfig();
+
+      //有选中翻译选中的词
+      if (text.length) {
+        const newWords = await trans({ q: text });
+        editor!.edit((builder) => {
+          builder.replace(selection, newWords!);
+        });
+        //vscode.window.showInformationMessage("translate result: " + newWords);
+      }
+    }
+  );
+
+  let disposable3 = vscode.commands.registerCommand(
+    "extension.everest.fanyi3",
+    async () => {
+      let editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return; // No open text editor
+      }
+      let document = editor.document;
+      let selection = editor.selection;
+      let text = editor.document.getText(selection);
+      const { translateZhCN } = getProxyConfig();
+
+      //有选中翻译选中的词
+      if (text.length) {
+        const newWords = await trans({ q: text });
+        editor!.edit((builder) => {
+          builder.replace(selection, newWords!);
+        });
+        //vscode.window.showInformationMessage("translate result: " + newWords);
+      }
+    }
+  );
+
+  let disposable4 = vscode.commands.registerCommand(
+    "extension.everest.fanyi4",
+    async () => {
+      let editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return; // No open text editor
+      }
+      let document = editor.document;
+      let selection = editor.selection;
+      let text = editor.document.getText(selection);
+      const { translateZhCN } = getProxyConfig();
+
+      //有选中翻译选中的词
+      if (text.length) {
+        const newWords = await trans({ q: text });
+        editor!.edit((builder) => {
+          builder.replace(selection, newWords!);
+        });
+        //vscode.window.showInformationMessage("translate result: " + newWords);
+      }
     }
   );
 
@@ -189,7 +243,10 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable1);
+  context.subscriptions.push(disposable2);
+  context.subscriptions.push(disposable3);
+  context.subscriptions.push(disposable4);
 }
 
 export function deactivate() {}
