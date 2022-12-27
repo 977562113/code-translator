@@ -58,10 +58,8 @@ async function words(params: Iparams): Promise<string | null> {
 }
 async function youdao(query: IQuery): Promise<string | null> {
   let { apiname, apikey, q } = query;
-  if (apikey === "") {
-    vscode.window.showInformationMessage(
-      "请先配置有道的api相关账号和密钥！"
-    );
+  if (apikey === "" || apiname === "") {
+    vscode.window.showInformationMessage("请先配置有道的api相关账号和密钥！");
     return "请先配置有道的api相关账号和密钥！";
   }
   const result = await words({
@@ -72,7 +70,7 @@ async function youdao(query: IQuery): Promise<string | null> {
     version: "1.1",
     q,
   });
-  console.log(chalk.yellow(`${q}:${result}`));
+  // console.log(chalk.yellow(`${q}:${result}`));
   return result;
 }
 
@@ -90,7 +88,50 @@ function trans(params: { q: string }) {
   return useGoogleApi ? google(params) : youdao({ ...params, apikey, apiname });
 }
 
+function snakeCaseToCamelCase(userInput: string|null) {
+  if(userInput === null || userInput === ''){
+    return null;
+  }
+
+  let userOutPut = '';
+  const userInputSplit = userInput.split(' ');
+  let x = 0;
+  for (const prm of userInputSplit) {
+    if (x === 0) {
+      userOutPut = prm.toLowerCase();
+    } else {
+      userOutPut += prm.substr(0, 1).toUpperCase() + prm.substr(1).toLowerCase();
+    }
+    x++;
+  } 
+  return userOutPut;
+}
+
+function trimUnusedWords(userInput: string|null) {
+  if(userInput === null || userInput === ''){
+    return null;
+  }
+
+  let userOutPut = '';
+  const userInputSplit = userInput.split(' ');
+  let x = 0;
+  for (const prm of userInputSplit) {
+    //让翻译后的单词更贴地气
+    if (prm.toLocaleLowerCase() == 'the' || prm.toLocaleLowerCase() == 'a' || prm.toLocaleLowerCase() == 'an') {
+      continue;
+    } 
+    userOutPut += prm;
+    if(x != userInputSplit.length - 1){
+      userOutPut += ' ';
+    }
+    x++;
+  } 
+  return userOutPut;
+}
+
+
 export function activate(context: vscode.ExtensionContext) {
+  //翻译【驼峰】
   let disposable1 = vscode.commands.registerCommand(
     "extension.everest.fanyi1",
     async () => {
@@ -102,17 +143,22 @@ export function activate(context: vscode.ExtensionContext) {
       let selection = editor.selection;
       let text = editor.document.getText(selection);
 
-      //有选中翻译选中的词
       if (text.length) {
-        const newWords = await trans({ q: text });
+        let newWords = await trans({ q: text });
+        if(newWords === null){
+          vscode.window.showInformationMessage("查询翻译API出错!请检查第三方翻译接口账号是否可用?");
+          return;
+        }
         editor!.edit((builder) => {
+          newWords = trimUnusedWords(newWords);
+          newWords = snakeCaseToCamelCase(newWords);
           builder.replace(selection, newWords!);
         });
-        //vscode.window.showInformationMessage("translate result: " + newWords);
       }
     }
   );
 
+  //翻译【空格】
   let disposable2 = vscode.commands.registerCommand(
     "extension.everest.fanyi2",
     async () => {
@@ -124,17 +170,21 @@ export function activate(context: vscode.ExtensionContext) {
       let selection = editor.selection;
       let text = editor.document.getText(selection);
 
-      //有选中翻译选中的词
       if (text.length) {
-        const newWords = await trans({ q: text });
+        let newWords = await trans({ q: text });
+        if(newWords === null){
+          vscode.window.showInformationMessage("查询翻译API出错!请检查第三方翻译接口账号是否可用?");
+          return;
+        }
         editor!.edit((builder) => {
-          builder.replace(selection, newWords!);
+          newWords = trimUnusedWords(newWords);
+          builder.replace(selection, newWords?.toLocaleLowerCase()!);
         });
-        //vscode.window.showInformationMessage("translate result: " + newWords);
       }
     }
   );
 
+  //翻译【中划线】
   let disposable3 = vscode.commands.registerCommand(
     "extension.everest.fanyi3",
     async () => {
@@ -146,17 +196,21 @@ export function activate(context: vscode.ExtensionContext) {
       let selection = editor.selection;
       let text = editor.document.getText(selection);
 
-      //有选中翻译选中的词
       if (text.length) {
-        const newWords = await trans({ q: text });
+        let newWords = await trans({ q: text });
+        if(newWords === null){
+          vscode.window.showInformationMessage("查询翻译API出错!请检查第三方翻译接口账号是否可用?");
+          return;
+        }
         editor!.edit((builder) => {
-          builder.replace(selection, newWords!);
+          newWords = trimUnusedWords(newWords);
+          builder.replace(selection, newWords?.replace(" ", "-")!);
         });
-        //vscode.window.showInformationMessage("translate result: " + newWords);
       }
     }
   );
 
+  //翻译【下划线】
   let disposable4 = vscode.commands.registerCommand(
     "extension.everest.fanyi4",
     async () => {
@@ -170,11 +224,16 @@ export function activate(context: vscode.ExtensionContext) {
 
       //有选中翻译选中的词
       if (text.length) {
-        const newWords = await trans({ q: text });
+        let newWords = await trans({ q: text });
+        if(newWords === null){
+          vscode.window.showInformationMessage("查询翻译API出错!请检查第三方翻译接口账号是否可用?");
+          return;
+        }
         editor!.edit((builder) => {
-          builder.replace(selection, newWords!);
+          newWords = trimUnusedWords(newWords);
+          newWords = snakeCaseToCamelCase(newWords);
+          builder.replace(selection, newWords?.replace(" ", "_")!);
         });
-        //vscode.window.showInformationMessage("translate result: " + newWords);
       }
     }
   );
@@ -210,4 +269,6 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable4);
 }
 
-export function deactivate() {}
+export function deactivate() {
+  vscode.window.showInformationMessage("欢迎您下次继续使用，再见！");
+}
