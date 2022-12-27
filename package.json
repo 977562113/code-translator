@@ -1,12 +1,12 @@
 {
-  "name": "everest-fanyi",
-  "displayName": "everest-fanyi",
-  "description": "翻译everest-i18n 生成json文件",
+  "name": "code-translator",
+  "displayName": "code-translator",
+  "description": "翻译工具( Ctrl+T 自动翻译并替换选中文字)",
   "version": "0.1.0",
-  "publisher": "maqi1520",
+  "publisher": "SRX",
   "repository": {
     "type": "git",
-    "url": "https://github.com/maqi1520/vscode-fanyi.git"
+    "url": "https://github.com/977562113/vscode-fanyi.git"
   },
   "license": "MIT",
   "engines": {
@@ -25,27 +25,41 @@
     "commands": [
       {
         "command": "extension.everest.fanyi",
-        "title": "翻译(everest-fanyi)"
+        "title": "翻译【驼峰】"
+      },
+      {
+        "command": "extension.everest.fanyi",
+        "title": "翻译【空格】"
+      },
+      {
+        "command": "extension.everest.fanyi",
+        "title": "翻译【中划线】"
+      },
+      {
+        "command": "extension.everest.fanyi",
+        "title": "翻译【下划线】"
       }
     ],
     "configuration": {
-      "title": "Vscode everest fanyi",
+      "title": "code-translator",
       "type": "object",
       "properties": {
-        "vscodeEverestFanyi.youdaoApiname": {
+        "codeTranslator.youdaoApiName": {
           "type": "string",
-          "description": "youdao apiname"
+          "description": "youdao apiname",
+          "default": "6ee894c94db96b35"
         },
-        "vscodeEverestFanyi.youdaoApikey": {
+        "codeTranslator.youdaoApiKey": {
           "type": "string",
-          "description": "youdao apikey"
+          "description": "youdao apikey",
+          "default": "ZbWmOGtsRyXkZNgmfvEEMX1Aw9DevCE1"
         },
-        "vscodeEverestFanyi.translateZhCN": {
+        "codeTranslator.translateZhCN": {
           "description": "根据key翻译，拷贝key为中文",
           "type": "boolean",
           "default": false
         },
-        "vscodeEverestFanyi.useGoogleAPI": {
+        "codeTranslator.useGoogleApi": {
           "description": "使用googleAPI",
           "type": "boolean",
           "default": false
@@ -57,6 +71,12 @@
         "command": "extension.everest.fanyi",
         "key": "ctrl+t",
         "mac": "cmd+t",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.everest.fanyi",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+k",
         "when": "editorTextFocus"
       }
     ],

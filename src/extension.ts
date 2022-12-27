@@ -59,8 +59,10 @@ async function words(params: Iparams): Promise<string | null> {
 async function youdao(query: IQuery): Promise<string | null> {
   let { apiname, apikey, q } = query;
   if (apikey === "") {
-    apiname = "iamatestmanx";
-    apikey = "2137553564";
+    vscode.window.showInformationMessage(
+      "请先配置有道的api相关账号和密钥！"
+    );
+    return "请先配置有道的api相关账号和密钥！";
   }
   const result = await words({
     keyfrom: apiname,
@@ -75,18 +77,18 @@ async function youdao(query: IQuery): Promise<string | null> {
 }
 
 function getProxyConfig(): Iconfig {
-  const config = vscode.workspace.getConfiguration("vscodeEverestFanyi");
+  const config = vscode.workspace.getConfiguration("codeTranslator");
   return {
-    apikey: config.get("youdaoApikey") || "2137553564",
-    apiname: config.get("youdaoApiname") || "iamatestmanx",
+    apikey: config.get("youdaoApiKey") || "",
+    apiname: config.get("youdaoApiName") || "",
     translateZhCN: config.get("translateZhCN") || false,
-    useGoogleAPI: config.get("useGoogleAPI") || false,
+    useGoogleApi: config.get("useGoogleApi") || false,
   };
 }
 
 function trans(params: { q: string }) {
-  const { useGoogleAPI, apikey, apiname } = getProxyConfig();
-  return useGoogleAPI ? google(params) : youdao({ ...params, apikey, apiname });
+  const { useGoogleApi, apikey, apiname } = getProxyConfig();
+  return useGoogleApi ? google(params) : youdao({ ...params, apikey, apiname });
 }
 
 function fanyiFile(fileText: string, translateZhCN: boolean) {
@@ -143,21 +145,22 @@ export function activate(context: vscode.ExtensionContext) {
           builder.replace(selection, newWords!);
         });
         //vscode.window.showInformationMessage("translate result: " + newWords);
-      } else {
-        let documentText = document.getText();
-
-        //没有选中翻译json文件
-        const code = await fanyiFile(documentText, translateZhCN);
-        const newfile = stringifyPretty(code);
-        const lastLine = document.lineAt(document.lineCount - 1);
-        const range = new vscode.Range(
-          new vscode.Position(0, 0),
-          lastLine.range.end
-        );
-        editor!.edit((editBuilder) => {
-          editBuilder.replace(range, newfile);
-        });
       }
+      //  else {
+      //   let documentText = document.getText();
+
+      //   //没有选中翻译json文件
+      //   const code = await fanyiFile(documentText, translateZhCN);
+      //   const newfile = stringifyPretty(code);
+      //   const lastLine = document.lineAt(document.lineCount - 1);
+      //   const range = new vscode.Range(
+      //     new vscode.Position(0, 0),
+      //     lastLine.range.end
+      //   );
+      //   editor!.edit((editBuilder) => {
+      //     editBuilder.replace(range, newfile);
+      //   });
+      // }
     }
   );
 
@@ -173,6 +176,8 @@ export function activate(context: vscode.ExtensionContext) {
       if (!text) {
         return;
       }
+
+      //TODO 延时响应
 
       const res = await trans({ q: text });
 
