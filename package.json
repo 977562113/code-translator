@@ -1,33 +1,60 @@
 {
-  "name": "vscode-fanyi",
-  "displayName": "vscode-fanyi",
-  "description": "",
-  "version": "0.0.2",
+  "name": "everest-fanyi",
+  "displayName": "everest-fanyi",
+  "description": "翻译everest-i18n 生成json文件",
+  "version": "0.1.0",
   "publisher": "maqi1520",
   "repository": {
     "type": "git",
     "url": "https://github.com/maqi1520/vscode-fanyi.git"
   },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.62.0"
   },
   "categories": [
     "Other"
   ],
-  "main": "./dist/extension.js",
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onCommand:extension.everest.fanyi"
   ],
+  "icon": "logo.png",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-fanyi.replace",
-        "title": "翻译"
+        "command": "extension.everest.fanyi",
+        "title": "翻译(everest-fanyi)"
       }
     ],
+    "configuration": {
+      "title": "Vscode everest fanyi",
+      "type": "object",
+      "properties": {
+        "vscodeEverestFanyi.youdaoApiname": {
+          "type": "string",
+          "description": "youdao apiname"
+        },
+        "vscodeEverestFanyi.youdaoApikey": {
+          "type": "string",
+          "description": "youdao apikey"
+        },
+        "vscodeEverestFanyi.translateZhCN": {
+          "description": "根据key翻译，拷贝key为中文",
+          "type": "boolean",
+          "default": false
+        },
+        "vscodeEverestFanyi.useGoogleAPI": {
+          "description": "使用googleAPI",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "keybindings": [
       {
-        "command": "vscode-fanyi.replace",
+        "command": "extension.everest.fanyi",
         "key": "ctrl+t",
         "mac": "cmd+t",
         "when": "editorTextFocus"
@@ -37,25 +64,29 @@
       "editor/context": [
         {
           "when": "editorTextFocus",
-          "command": "vscode-fanyi.replace",
+          "command": "extension.everest.fanyi",
           "group": "1_modification"
         }
       ]
     },
-    "configuration": {
-      "title": "vscodeFanyi",
-      "type": "object",
-      "properties": {
-        "vscodeFanyi.youdaoAppkey": {
-          "type": "string",
-          "description": "youdao appKey"
-        },
-        "vscodeFanyi.youdaoAppSecret": {
-          "type": "string",
-          "description": "youdao appSecret"
-        }
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/snippets.json"
+      },
+      {
+        "language": "javascriptreact",
+        "path": "./snippets/snippets.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/snippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/snippets.json"
       }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
@@ -86,8 +117,10 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "crypto-js": "^4.1.1",
-    "querystring": "^0.2.1"
+    "@vitalets/google-translate-api": "^7.0.0",
+    "chalk": "^2.4.1",
+    "co-request": "^1.0.0",
+    "json-stringify-pretty-compact": "^1.2.0",
+    "query-string": "^6.2.0"
   }
 }

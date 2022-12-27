@@ -1,28 +1,83 @@
-# vscode-fanyi README
+# everest-fanyi
 
-### 翻译 API
+## VS Code everest-fanyi
 
-翻译 api 我这边选择使用 [有道智能云](https://ai.youdao.com/)，当然大家可以选择其他翻译 API，选择它的原因是因为：注册就有 100 元的体验金，对于个人使用完全足够了。
+[![Version](https://vsmarketplacebadge.apphb.com/version/maqi1520.everest-fanyi.svg)](https://vsmarketplacebadge.apphb.com/version-short/maqi1520.everest-fanyi.svg)
+[![Install](https://vsmarketplacebadge.apphb.com/installs/maqi1520.everest-fanyi.svg)](https://vsmarketplacebadge.apphb.com/installs-short/maqi1520.everest-fanyi.svg)
+[![Ratings](https://vsmarketplacebadge.apphb.com/rating-short/maqi1520.everest-fanyi.svg)](https://vsmarketplacebadge.apphb.com/rating-short/maqi1520.everest-fanyi.svg)
 
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/68c022ba9cb6469a80309e3e79a72178~tplv-k3u1fbpfcp-watermark.image?)
+---
 
-首先创建一个应用，选择服务为自然语言翻译服务，接入方式为 API
+## 安装
 
-![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b8ca22c346d4480bbaf85a633b283131~tplv-k3u1fbpfcp-watermark.image?)
+安装扩展您需要启动命令面板中(Ctrl + Shift + P 或 Cmd + Shift + P)和类型的扩展。
 
-创建完成后可以获得应用 ID 和秘钥。
+## 使用
 
-### 划词翻译
+### 翻译单词
 
-**效果**
+选中想要翻译的单词 右键选择翻译菜单或按`cmd+t` (windows `control+t`)，就可以替换选中内容
 
-![2021-11-18 18-32-22.2021-11-18 18_33_04.gif](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7d995e26a828461e967db756a7d7079a~tplv-k3u1fbpfcp-watermark.image)
+### 翻译 everest local json
 
-### 划词替换
+- json 格式
 
-![2021-11-18 15-46-25.2021-11-18 15_48_02.gif](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/87d3fab39246472ba33838488dca1189~tplv-k3u1fbpfcp-watermark.image?)
+```json
+[
+  ["key", "zh_CN", "en_US"],
+  ["不翻译", "不翻译文本", "只有null会翻译"],
+  ["transl", "翻译文本", null],
+  ["say.hi", "你好", null]
+]
+```
 
-快捷键
+打开 json 进入编辑状态 右键选择翻译菜单或按`cmd+t` (windows `control+t`)
 
-        "mac": "cmd+t"
-        "key": "ctrl+t"
+![fanyi json](image/json.gif)
+
+## 设置
+
+1. 支持中文 key,根据 key 翻译，填充 key 为中文
+2. 支持有道翻译（中英文互译）
+3. 支持 google api 翻译
+4. 支持设置自定义 apikey 和 apiname
+
+## snippets
+
+根据 @uyun/hooks 生成对应 hooks 代码片段
+
+- !useDidMount
+
+- !useDidUpdate
+
+- !useWillUnmount
+
+- !useRequest
+
+- !useRouter
+
+- !useQueryString
+
+- !useLocalStorage
+
+- !useSessionStorage
+
+- !useWindowSize
+
+- !usePagination
+
+- !useInputSearch
+
+- !useFormItemLayout
+
+- !useDebounce
+
+- !useThrottle
+
+- !useTween
+
+- !useRaf
+
+- !useTimeout
+
+- !useInterval
