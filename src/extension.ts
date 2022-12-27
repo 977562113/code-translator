@@ -35,7 +35,7 @@ async function words(params: Iparams): Promise<string | null> {
       from: "AUTO",
       to: "AUTO",
       client: "fanyideskweb",
-      salt: "1500092479607",
+      salt: (new Date).getTime() + "",
       sign: "c98235a85b213d482b8e65f6b1065e26",
       doctype: "json",
       version: "2.1",
@@ -45,7 +45,8 @@ async function words(params: Iparams): Promise<string | null> {
       i: params.q,
     };
     const { body } = (await request(`${url}?${stringify(data)}`)) as any;
-    return JSON.parse(body).translateResult[0][0]["tgt"];
+    // return JSON.parse(body).translateResult[0][0]["tgt"];
+    return "apply another forbidden";
   } catch (e) {
     console.log(e);
   }
@@ -107,7 +108,7 @@ function snakeCaseToCamelCase(userInput: string|null) {
   return userOutPut;
 }
 
-function trimUnusedWords(userInput: string|null) {
+function trimUnusedWords(userInput: string|null, splitSign: string|null) {
   if(userInput === null || userInput === ''){
     return null;
   }
@@ -122,7 +123,7 @@ function trimUnusedWords(userInput: string|null) {
     } 
     userOutPut += prm;
     if(x != userInputSplit.length - 1){
-      userOutPut += ' ';
+      userOutPut += splitSign;
     }
     x++;
   } 
@@ -150,7 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
           return;
         }
         editor!.edit((builder) => {
-          newWords = trimUnusedWords(newWords);
+          newWords = trimUnusedWords(newWords, " ");
           newWords = snakeCaseToCamelCase(newWords);
           builder.replace(selection, newWords!);
         });
@@ -177,8 +178,7 @@ export function activate(context: vscode.ExtensionContext) {
           return;
         }
         editor!.edit((builder) => {
-          newWords = trimUnusedWords(newWords);
-          builder.replace(selection, newWords?.toLocaleLowerCase()!);
+          builder.replace(selection, trimUnusedWords(newWords, " ")?.toLocaleLowerCase()!);
         });
       }
     }
@@ -203,8 +203,7 @@ export function activate(context: vscode.ExtensionContext) {
           return;
         }
         editor!.edit((builder) => {
-          newWords = trimUnusedWords(newWords);
-          builder.replace(selection, newWords?.replace(" ", "-")!);
+          builder.replace(selection, trimUnusedWords(newWords, "-")?.toLocaleLowerCase()!);
         });
       }
     }
@@ -230,38 +229,37 @@ export function activate(context: vscode.ExtensionContext) {
           return;
         }
         editor!.edit((builder) => {
-          newWords = trimUnusedWords(newWords);
-          newWords = snakeCaseToCamelCase(newWords);
-          builder.replace(selection, newWords?.replace(" ", "_")!);
+          builder.replace(selection, trimUnusedWords(newWords, "_")?.toLocaleLowerCase()!);
         });
       }
     }
   );
 
-  vscode.languages.registerHoverProvider("*", {
-    async provideHover(document, position, token) {
-      const editor = vscode.window.activeTextEditor;
-      if (!editor) {
-        return; // No open text editor
-      }
+  //选中文案后，鼠标悬停的翻译提示
+  // vscode.languages.registerHoverProvider("*", {
+  //   async provideHover(document, position, token) {
+  //     const editor = vscode.window.activeTextEditor;
+  //     if (!editor) {
+  //       return; // No open text editor
+  //     }
 
-      const selection = editor.selection;
-      const text = document.getText(selection);
-      if (!text) {
-        return;
-      }
+  //     const selection = editor.selection;
+  //     const text = document.getText(selection);
+  //     if (!text) {
+  //       return;
+  //     }
 
-      //TODO 延时响应
+  //     //TODO 延时响应
 
-      const res = await trans({ q: text });
+  //     const res = await trans({ q: text });
 
-      const markdownString = new vscode.MarkdownString();
+  //     const markdownString = new vscode.MarkdownString();
 
-      markdownString.appendMarkdown(`#### 翻译 \n\n ${res} \n\n`);
+  //     markdownString.appendMarkdown(`#### 翻译 \n\n ${res} \n\n`);
 
-      return new vscode.Hover(markdownString);
-    },
-  });
+  //     return new vscode.Hover(markdownString);
+  //   },
+  // });
 
   context.subscriptions.push(disposable1);
   context.subscriptions.push(disposable2);

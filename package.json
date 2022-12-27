@@ -6,7 +6,7 @@
   "publisher": "SRX",
   "repository": {
     "type": "git",
-    "url": "https://github.com/977562113/vscode-fanyi.git"
+    "url": "https://github.com/977562113/code-translator.git"
   },
   "license": "MIT",
   "engines": {
