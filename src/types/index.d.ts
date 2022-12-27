@@ -13,7 +13,6 @@ export interface IQuery {
   apikey: string;
 }
 export interface Iconfig {
-  translateZhCN: boolean;
   useGoogleApi: boolean;
   apiname: string;
   apikey: string;

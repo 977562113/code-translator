@@ -57,11 +57,6 @@
           "description": "youdao apikey",
           "default": "ZbWmOGtsRyXkZNgmfvEEMX1Aw9DevCE1"
         },
-        "codeTranslator.translateZhCN": {
-          "description": "根据key翻译，拷贝key为中文",
-          "type": "boolean",
-          "default": false
-        },
         "codeTranslator.useGoogleApi": {
           "description": "使用googleAPI",
           "type": "boolean",

@@ -81,7 +81,6 @@ function getProxyConfig(): Iconfig {
   return {
     apikey: config.get("youdaoApiKey") || "",
     apiname: config.get("youdaoApiName") || "",
-    translateZhCN: config.get("translateZhCN") || false,
     useGoogleApi: config.get("useGoogleApi") || false,
   };
 }
@@ -89,40 +88,6 @@ function getProxyConfig(): Iconfig {
 function trans(params: { q: string }) {
   const { useGoogleApi, apikey, apiname } = getProxyConfig();
   return useGoogleApi ? google(params) : youdao({ ...params, apikey, apiname });
-}
-
-function fanyiFile(fileText: string, translateZhCN: boolean) {
-  let translateIndex = translateZhCN ? 0 : 1;
-  let data = [] as fileTextData;
-  try {
-    data = JSON.parse(fileText);
-  } catch (err) {
-    vscode.window.showInformationMessage(
-      "翻译文件必须是everest-i18n/babel 生成的lcales 文件"
-    );
-  }
-  if (data[0][0] !== "key" && data[0][1] !== "zh_CN") {
-    vscode.window.showInformationMessage(
-      "翻译文件必须是everest-i18n/babel 生成的lcales 文件"
-    );
-  }
-  return Promise.all(
-    data.map(async (item) => {
-      if (item[2] === null) {
-        if (translateIndex === 0) {
-          if (item[1] === null) {
-            item[1] = item[0];
-          }
-          item[2] = await trans({ q: item[0] });
-        } else {
-          item[2] = await trans({
-            q: item[translateIndex] as string,
-          });
-        }
-      }
-      return item;
-    })
-  );
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -136,7 +101,6 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document;
       let selection = editor.selection;
       let text = editor.document.getText(selection);
-      const { translateZhCN } = getProxyConfig();
 
       //有选中翻译选中的词
       if (text.length) {
@@ -159,7 +123,6 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document;
       let selection = editor.selection;
       let text = editor.document.getText(selection);
-      const { translateZhCN } = getProxyConfig();
 
       //有选中翻译选中的词
       if (text.length) {
@@ -182,7 +145,6 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document;
       let selection = editor.selection;
       let text = editor.document.getText(selection);
-      const { translateZhCN } = getProxyConfig();
 
       //有选中翻译选中的词
       if (text.length) {
@@ -205,7 +167,6 @@ export function activate(context: vscode.ExtensionContext) {
       let document = editor.document;
       let selection = editor.selection;
       let text = editor.document.getText(selection);
-      const { translateZhCN } = getProxyConfig();
 
       //有选中翻译选中的词
       if (text.length) {
