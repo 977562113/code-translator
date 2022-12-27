@@ -45,8 +45,7 @@ async function words(params: Iparams): Promise<string | null> {
       i: params.q,
     };
     const { body } = (await request(`${url}?${stringify(data)}`)) as any;
-    // return JSON.parse(body).translateResult[0][0]["tgt"];
-    return "apply another forbidden";
+    return JSON.parse(body).translateResult[0][0]["tgt"];
   } catch (e) {
     console.log(e);
   }
@@ -138,7 +137,7 @@ export function activate(context: vscode.ExtensionContext) {
     async () => {
       let editor = vscode.window.activeTextEditor;
       if (!editor) {
-        return; // No open text editor
+        return;
       }
       let document = editor.document;
       let selection = editor.selection;
